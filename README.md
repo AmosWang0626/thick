@@ -1,0 +1,2 @@
+# thick
+python study demo
