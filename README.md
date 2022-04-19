@@ -6,3 +6,6 @@
 
 ## reptile
 > 爬虫
+
+## auto
+> 使用 selenium 自动点击浏览器上的按钮
