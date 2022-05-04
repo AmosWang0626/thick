@@ -2,40 +2,43 @@
 
 import RPi.GPIO as GPIO
 
-BtnPin = 11
+BtnPin = 12
 
-Rpin = 16
-Gpin = 20
-Bpin = 21
+Rpin = 18
+Gpin = 23
+
+SWITCH_OBJ = {'val': False}
 
 
 def setup():
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(Gpin, GPIO.OUT)
-    GPIO.setup(Rpin, GPIO.OUT)
-    GPIO.setup(BtnPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(Rpin, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup(Gpin, GPIO.OUT, initial=GPIO.HIGH)
+    GPIO.setup(BtnPin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.add_event_detect(BtnPin, GPIO.BOTH, callback=detect, bouncetime=200)
 
 
 def Led(x):
-    if x == 0:
+    if x:
         GPIO.output(Rpin, 1)
         GPIO.output(Gpin, 0)
-    if x == 1:
+    else:
         GPIO.output(Rpin, 0)
         GPIO.output(Gpin, 1)
 
 
 def Print(x):
-    if x == 0:
-        print('***********************')
-        print('*   Button Pressed!   *')
-        print('***********************')
+    print('***********************')
+    print('*   Button Pressed!   *', x)
+    print('***********************')
 
 
 def detect(chn):
-    Led(GPIO.input(BtnPin))
-    Print(GPIO.input(BtnPin))
+    if GPIO.input(BtnPin) == 0:
+        SWITCH_OBJ['val'] = not SWITCH_OBJ['val']
+    tempVal = SWITCH_OBJ['val']
+    Led(tempVal)
+    Print(tempVal)
 
 
 def loop():
