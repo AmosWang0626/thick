@@ -4,10 +4,8 @@ import RPi.GPIO as GPIO
 
 BtnPin = 12
 
-Rpin = 18
-Gpin = 23
-
-SWITCH_OBJ = {'val': False}
+Rpin = 19
+Gpin = 26
 
 
 def setup():
@@ -34,9 +32,10 @@ def Print(x):
 
 
 def detect(chn):
+    global changeFlag
     if GPIO.input(BtnPin) == 0:
-        SWITCH_OBJ['val'] = not SWITCH_OBJ['val']
-    tempVal = SWITCH_OBJ['val']
+        changeFlag = not changeFlag
+    tempVal = changeFlag
     Led(tempVal)
     Print(tempVal)
 
