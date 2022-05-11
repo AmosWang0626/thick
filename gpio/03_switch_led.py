@@ -7,6 +7,8 @@ BtnPin = 12
 Rpin = 19
 Gpin = 26
 
+SWITCH_OBJ = {'val': False}
+
 
 def setup():
     GPIO.setmode(GPIO.BCM)
@@ -32,10 +34,9 @@ def Print(x):
 
 
 def detect(chn):
-    global changeFlag
     if GPIO.input(BtnPin) == 0:
-        changeFlag = not changeFlag
-    tempVal = changeFlag
+        SWITCH_OBJ['val'] = not SWITCH_OBJ['val']
+    tempVal = SWITCH_OBJ['val']
     Led(tempVal)
     Print(tempVal)
 
