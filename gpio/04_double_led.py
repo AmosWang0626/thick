@@ -1,45 +1,47 @@
 #!/usr/bin/env python
-import random
 import time
 
 import RPi.GPIO as GPIO
 
-Rpin = 18
-Gpin = 23
+pin_red = 19
+pin_yellow = 26
 
-SWITCH_OBJ = {'val': False}
-
-
-def setup():
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(Rpin, GPIO.OUT, initial=GPIO.LOW)
-    GPIO.setup(Gpin, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(pin_red, GPIO.OUT)
+GPIO.setup(pin_yellow, GPIO.OUT)
 
 
-def Led(x):
-    if x:
-        GPIO.output(Rpin, GPIO.HIGH)
-        GPIO.output(Gpin, GPIO.LOW)
-    else:
-        GPIO.output(Rpin, GPIO.LOW)
-        GPIO.output(Gpin, GPIO.HIGH)
-
-
-def loop():
+def show():
     while True:
-        Led(random.randint(0, 1))
-        time.sleep(0.5)
+        # 亮红 + 暗黄 = 红
+        GPIO.output(pin_red, GPIO.HIGH)
+        GPIO.output(pin_yellow, GPIO.LOW)
+        time.sleep(1)
+
+        # 亮红 + 黄 = 橙
+        GPIO.output(pin_red, GPIO.HIGH)
+        GPIO.output(pin_yellow, GPIO.HIGH)
+        time.sleep(1)
+
+        # 亮黄 + 暗红 = 黄
+        GPIO.output(pin_red, GPIO.LOW)
+        GPIO.output(pin_yellow, GPIO.HIGH)
+        time.sleep(1)
+
+        # 暗红 + 黄 = 非亮橙
+        GPIO.output(pin_red, GPIO.LOW)
+        GPIO.output(pin_yellow, GPIO.LOW)
+        time.sleep(1)
 
 
 def destroy():
-    GPIO.output(Gpin, GPIO.HIGH)
-    GPIO.output(Rpin, GPIO.HIGH)
+    GPIO.output(pin_red, GPIO.LOW)
+    GPIO.output(pin_yellow, GPIO.LOW)
     GPIO.cleanup()
 
 
 if __name__ == '__main__':
-    setup()
     try:
-        loop()
+        show()
     except KeyboardInterrupt:
         destroy()
